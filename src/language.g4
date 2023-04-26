@@ -46,12 +46,14 @@ doWhile: DO_KEYWORD (statement*)? AS_LONG_AS_KEYWORD condition* ';';
 if: IF_KEYWORD '{' condition* '}' THEN_KEYWORD (statement*)? ';'
     (ELIF_KEYWORD '(' condition* ')' DO_KEYWORD (statement*)? END_KEYWORD)?
     (ELSE_DO_AS_FOLLOWS_KEYWORD (statement*)? STOP_KEYWORD )?;
+
 conditionionalOperator: condition '?' statement* ':' statement* (';')?;
+
 switch: SWITCH_KEYWORD STRING_VALUE MATCH_KEYWORD
         CASE_KEYWORD STRING_VALUE ':' (statement*)? (BREAK_KEYWORD)?
         (CASE_KEYWORD STRING_VALUE ':' (statement*)? (BREAK_KEYWORD)?)*
-        (DEFAULT_KEYWORD STRING_VALUE ':' (statement*)? END_KEYWORD)?
-        ;
+        (DEFAULT_KEYWORD STRING_VALUE ':' (statement*)? END_KEYWORD)? ;
+
 exception: TRY_KEYWORD '{{' (statement*)? '}}' CATCH_KEYWORD
            '(' LIBRARY_NAME (',' LIBRARY_NAME)* ')' BEGIN_KEYWORD (statement*)? END_KEYWORD;
 
@@ -64,6 +66,7 @@ condition: (TRUE_KEYWORD
 statement: (variable_initializing|array_initializing|refrence_initializing|for|while
             |doWhile|if|conditionionalOperator|switch|exception|increment|assignment);
 assignment: VARIABLE_NAME '<-' VALUE (';')?;
+
 ACCESSTYPE: D I R E C T A C C E S S|I N D I R E C T A C C E S S|R E S T R I C T E D;
 LIBRARY_NAME: [A-Z_$][a-zA-Z_$0-9]*;
 VARIABLE_NAME: [a-zA-Z_$][a-zA-Z_$0-9]*;
@@ -112,7 +115,7 @@ fragment INTEGER_VALUE: '\b[0-9]+\b'; //todo add binary and hex value
 fragment FLOAT_VALUE: '[+-]?([0-9]*[.])?[0-9]+';
 fragment CHAR_VALUE: '^[0-9A-Za-z]'; //todo add special charecters
 fragment BOOLEAN_VALUE: (TRUE_KEYWORD|FALSE_KEYWORD);
-fragment STRING_VALUE: '^["].*["]$';
+fragment STRING_VALUE: '"'.*'"';
 fragment NULL_VALUE: NULL_KEYWORD;
 fragment TRUE_KEYWORD: T R U E;
 fragment FALSE_KEYWORD: F A L S E;
